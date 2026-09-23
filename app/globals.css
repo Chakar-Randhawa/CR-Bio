@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { border-color: theme("colors.border"); }
+html { scroll-behavior: smooth; }
+body { background-color: #0a0a12; color: #f2f2f7; font-feature-settings: "ss01" on, "ss02" on; }
+::selection { background: rgba(124, 108, 246, 0.35); color: #fff; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+:focus-visible { outline: 2px solid #f0b429; outline-offset: 2px; border-radius: 6px; }
+
+@layer components {
+  .glass { @apply bg-white/[0.05] backdrop-blur-xl border border-white/[0.09] shadow-glass; }
+  .glass-panel { @apply glass rounded-xl2; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-violet to-violet-soft px-6 py-3 text-sm font-semibold text-white shadow-[0_2px_10px_rgba(10,10,18,0.35)] transition-all duration-200 ease-out hover:shadow-[0_4px_16px_rgba(10,10,18,0.4)] hover:-translate-y-px active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none; }
+  .btn-secondary { @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white/90 backdrop-blur-md transition-all duration-200 hover:bg-white/[0.09] hover:border-white/25 disabled:opacity-50 disabled:pointer-events-none; }
+  .btn-gold { @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold to-gold-soft px-6 py-3 text-sm font-bold text-ink shadow-[0_2px_10px_rgba(10,10,18,0.25)] transition-all duration-200 ease-out hover:shadow-[0_4px_16px_rgba(10,10,18,0.3)] hover:-translate-y-px disabled:opacity-50 disabled:pointer-events-none; }
+  .input-field { @apply w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-mist/70 outline-none transition-colors focus:border-violet/60 focus:bg-white/[0.06]; }
+  .label-eyebrow { @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-mist; }
+}
+
+@layer utilities { .text-balance { text-wrap: balance; } }
+
+@keyframes crbio-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+@keyframes crbio-shine-sweep { 0% { transform: translateX(-130%) skewX(-20deg); } 100% { transform: translateX(230%) skewX(-20deg); } }
+
+.btn-anim-lift { transition: transform 220ms ease, box-shadow 220ms ease; }
+.btn-anim-lift:hover { transform: translateY(-3px); }
+.btn-anim-grow { transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.btn-anim-grow:hover { transform: scale(1.045); }
+.btn-anim-pulse { animation: crbio-pulse 2.2s ease-in-out infinite; }
+.btn-anim-shine { position: relative; overflow: hidden; }
+.btn-anim-shine::after { content: ""; position: absolute; top: 0; left: 0; width: 45%; height: 100%; background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.35) 50%, transparent 80%); transform: translateX(-130%) skewX(-20deg); pointer-events: none; }
+.btn-anim-shine:hover::after { animation: crbio-shine-sweep 900ms ease forwards; }
+
+.device-frame-mobile, .device-frame-tablet, .device-frame-desktop { display: flex; flex-direction: column; }
+.device-frame-mobile { width: 300px; height: 610px; border-radius: 2.25rem; padding: 12px; }
+.device-frame-mobile .device-screen { border-radius: 1.6rem; flex: 1; min-height: 0; }
+.device-frame-mobile .device-notch { display: block; }
+.device-frame-tablet { width: 420px; height: 560px; border-radius: 1.4rem; padding: 14px; }
+.device-frame-tablet .device-screen { border-radius: 0.9rem; flex: 1; min-height: 0; }
+.device-frame-tablet .device-notch { display: none; }
+.device-frame-desktop { width: 100%; max-width: 560px; height: 460px; border-radius: 0.75rem; padding: 0; }
+.device-frame-desktop .device-screen { border-radius: 0 0 0.5rem 0.5rem; flex: 1; min-height: 0; }
+.device-frame-desktop .device-notch { display: none; }
+.device-frame-desktop .device-browserbar { display: flex; }
+.device-browserbar { display: none; }
+
+/* ============================================================
+   Phase 5 — Print / PDF export
+   Dashboard chrome (sidebar, header, mobile nav) hides via
+   Tailwind's print: modifier at the component level. These rules
+   make the report content itself legible on a printed/PDF page.
+   ============================================================ */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0a0a12 !important;
+  }
+  .bg-grain-glow {
+    background: none !important;
+  }
+  .glass-panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e5ef !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    break-inside: avoid;
+  }
+  .text-white,
+  .text-white\/90,
+  .text-white\/80 {
+    color: #0a0a12 !important;
+  }
+  .text-mist {
+    color: #4b4b63 !important;
+  }
+  a[href]::after {
+    content: none !important;
+  }
+}
+
+/* Respect the visitor's OS-level motion preference — real enterprise
+   products (and accessibility guidelines) treat this as a baseline,
+   not an afterthought. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
